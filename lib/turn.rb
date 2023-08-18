@@ -10,14 +10,14 @@ class Turn
   end
 
   def type
-    @play_card1 = @player1.deck.rank_of_card_at(0)
-    @play_card2 = @player2.deck.rank_of_card_at(0)
-    @war_card1 = @player1.deck.rank_of_card_at(2)
-    @war_card2 = @player2.deck.rank_of_card_at(2)
+    @card_rank1 = @player1.deck.rank_of_card_at(0)
+    @card_rank2 = @player2.deck.rank_of_card_at(0)
+    @war_rank1 = @player1.deck.rank_of_card_at(2)
+    @war_rank2 = @player2.deck.rank_of_card_at(2)
 
-    if @play_card1 != @play_card2
+    if @card_rank1 != @card_rank2
       :basic
-    elsif !@war_card1 || !@war_card2 || @war_card1 == @war_card2
+    elsif !@war_rank1 || !@war_rank2 || @war_rank1 == @war_rank2
       :mutually_assured_destruction
     else
       :war
@@ -26,13 +26,13 @@ class Turn
 
   def winner
     if type == :basic
-      if @play_card1 > @play_card2
+      if @card_rank1 > @card_rank2
         then @player1
       else 
         @player2
       end
     elsif type == :war
-      if @war_card1 > @war_card2
+      if @war_rank1 > @war_rank2
         then @player1
       else
         @player2
