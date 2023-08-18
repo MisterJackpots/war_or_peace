@@ -53,7 +53,7 @@ RSpec.describe Game do
     game.compile_deck
     expect(game.game_deck.length).to eq(52)
   end
-
+  
   it 'can distribute game deck to players' do
     deck1 = Deck.new([])
     deck2 = Deck.new([])
@@ -63,7 +63,7 @@ RSpec.describe Game do
     game = Game.new(turn)
     game.compile_deck
     game.deal_deck
-    expect(player1.deck.length).to eq(26)
-    expect(player1.deck.length).to eq(26)
+    expect(player1.deck.cards.length).to eq(26)
+    expect(player2.deck.cards.length).to eq(26)
   end
 end
