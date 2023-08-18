@@ -1,8 +1,13 @@
-require 'pry'
+require './lib/card'
+require './lib/deck'
+require './lib/player'
+require './lib/turn'
 
 class Game
   attr_reader :turn_count, 
-              :game_deck
+              :game_deck,
+              :player1,
+              :player2
 
   def initialize
     @turn_count = 0
@@ -10,10 +15,43 @@ class Game
   end
 
   def start
-   "Welcome to War! (or Peace) This game will be played with 52 cards.
-    The players today are Megan and Aurora.
-    Type 'GO' to start the game!
-    ------------------------------------------------------------------"
+    self.game_message
+
+    if gets.chomp.downcase == 'go'
+      self.begin_game
+    else
+      self.abort('Veni, Vidi, Vici, baby!!!')
+    end
+  end
+
+  def begin_game
+    self.create_players
+    self.compile_deck
+    self.deal_deck
+    self.run_game
+  end
+
+  def run_game
+    while @turn_count < 1000000
+      self.new_turn
+      self.check_for_winner
+    end
+
+    self.abort('---- DRAW ----')
+  end
+  
+  def game_message
+    puts "Welcome to War! (or Peace) This game will be played with 52 cards."
+    puts "The players today are Megan and Aurora."
+    puts "Type 'GO' to start the game!"
+    puts "------------------------------------------------------------------"
+  end
+
+  def create_players
+    deck1 = Deck.new([])
+    deck2 = Deck.new([])
+    @player1 = Player.new('Megan', deck1)
+    @player2 = Player.new('Aurora', deck2)
   end
 
   def compile_deck
@@ -71,23 +109,55 @@ class Game
     card52 = Card.new(:spade, 'Ace', 14)
 
     @game_deck = card1, card2, card3, card4, card5, card6, card7, card8, card9,
-       card10, card11, card12, card13, card14, card15, card16, card17, card18,
-       card19, card20, card21, card22, card23, card24, card25, card26, card27,
-       card28, card29, card30, card31, card32, card33, card34, card35, card36,
-       card37, card38, card39, card40, card41, card42, card43, card44, card45,
-       card46, card47, card48, card49, card50, card51, card52
+      card10, card11, card12, card13, card14, card15, card16, card17, card18,
+      card19, card20, card21, card22, card23, card24, card25, card26, card27,
+      card28, card29, card30, card31, card32, card33, card34, card35, card36,
+      card37, card38, card39, card40, card41, card42, card43, card44, card45,
+      card46, card47, card48, card49, card50, card51, card52
 
-    5.times do
-      @game_deck.shuffle!
-    end
+    
+    @game_deck.shuffle!
   end
 
   def deal_deck
     26.times do
       @player1.deck.cards << @game_deck.shift
-      @player2turn.player2.deck.cards << @game_deck.shift
+      @player2.deck.cards << @game_deck.shift
     end
   end
 
+  def new_turn
+    @turn_count += 1
+    @turn = Turn.new(@player1, @player2)
+    winner = @turn.winner
+    self.turn_message
 
+    @turn.pile_cards
+
+    @turn.award_spoils(winner) unless winner == "No Winner"
+  end
+
+  def check_for_winner
+    if @player1.has_lost?
+      puts "*~*~*~* #{@player2.name} has won the game! *~*~*~*"
+      exit
+    elsif @player2.has_lost?
+      puts "*~*~*~* #{@player1.name} has won the game! *~*~*~*"
+      exit
+    end
+  end
+
+  def turn_message
+    current_turn = @turn.type
+    removed_count = [@player1.deck.cards.size, @player2.deck.cards.size].min > 2 ? 6 : 2
+
+    case current_turn
+    when :basic
+      puts "Turn #{@turn_count}: #{@turn.winner.name} won 2 cards"
+    when :war
+      puts "Turn #{@turn_count}: WAR - #{@turn.winner.name} won 6 cards"
+    else
+      puts "Turn #{@turn_count}: *mutually assured destruction* #{removed_count} cards removed from play"
+    end
+  end
 end
