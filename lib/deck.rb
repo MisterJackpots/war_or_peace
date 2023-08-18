@@ -6,7 +6,9 @@ class Deck
   end
 
   def rank_of_card_at(index)
-    @cards[index].rank
+    # @cards[index].rank
+    card = @cards[index]
+    card.rank if card
   end
 
   # Method high_ranking_cards should read rank of each card in the cards array, if the
@@ -32,6 +34,6 @@ class Deck
   end
 
   def add_card(cards)
-    @cards.push(cards)
+    cards.kind_of?(Array) ? @cards.concat(cards) : @cards.push(cards)
   end
 end
