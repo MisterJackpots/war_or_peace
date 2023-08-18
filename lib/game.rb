@@ -1,12 +1,19 @@
 require 'pry'
 
 class Game
-  attr_reader :turn, :turn_count, :game_deck
+  attr_reader :turn_count, 
+              :game_deck
 
-  def initialize(turn)
-    @turn = turn
+  def initialize
     @turn_count = 0
     @game_deck = []
+  end
+
+  def start
+   "Welcome to War! (or Peace) This game will be played with 52 cards.
+    The players today are Megan and Aurora.
+    Type 'GO' to start the game!
+    ------------------------------------------------------------------"
   end
 
   def compile_deck
@@ -77,12 +84,10 @@ class Game
 
   def deal_deck
     26.times do
-      @turn.player1.deck.cards << @game_deck.shift
-      @turn.player2.deck.cards << @game_deck.shift
+      @player1.deck.cards << @game_deck.shift
+      @player2turn.player2.deck.cards << @game_deck.shift
     end
   end
 
-  def start
-    @turn_count += 1
-  end
+
 end
