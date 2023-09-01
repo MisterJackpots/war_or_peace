@@ -6,14 +6,9 @@ class Deck
   end
 
   def rank_of_card_at(index)
-    # @cards[index].rank
     card = @cards[index]
     card.rank if card
   end
-
-  # Method high_ranking_cards should read rank of each card in the cards array, if the
-  # card rank is greater than 10, the card should go into the high_rank_cards array
-
 
   def high_ranking_cards
     @cards.find_all { |card| card.rank > 10 }

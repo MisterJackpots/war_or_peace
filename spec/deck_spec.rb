@@ -33,9 +33,6 @@ RSpec.describe Deck do
     expect(deck.high_ranking_cards).to eq([card1, card3])
   end
 
-  # when method percent_high_ranking called on deck variable, it returns
-  # float equal to percentage of high_rank_cards in current deck, which is 66.67
-
   it 'can show percentage of high ranking cards' do
     card1 = Card.new(:diamond, 'Queen', 12)
     card2 = Card.new(:spade, '3', 3)
